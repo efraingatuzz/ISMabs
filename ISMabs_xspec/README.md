@@ -13,6 +13,7 @@ ISMabs is an X-ray photoabsorption model for the interstellar medium that takes 
 Compared with previous photoabsorption models, which solely rely on neutral species, the inclusion of ions leads to improvements of the spectral fits. Fit parameters comprise the column densities of abundant contributors that allow direct estimates of ionization states. 
 
 OBTAINING ISMabs:
+
 Different flavours of the model can be downloaded from the Github repository at https://github.com/efraingatuzz/ISMabs. Currently versions include:
 
 - ISMabs_xspec: The ISMabs package (version 1.2) that appears in Gatuzz et al. (2015). It is included as part of the standard xspec software (from version 12.10). 
@@ -22,7 +23,6 @@ Different flavours of the model can be downloaded from the Github repository at 
 ISMabs_xspec: 
 
 ISMabs model version 1.2 (the same version included as part of the standard XSPEC software). The contents of the ISMAabs_xspec folder include:
-
 - atomic_data/AtomicData.fits  -- atomic database binary fits file. This must reside in the directory atomic_data inside the folder where the model is located.  
 - ismabs.f90 -- source code for ISMabs
 - lmodel_ismabs.dat -- local model definition file needed by xspec.  
