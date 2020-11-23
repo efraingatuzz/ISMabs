@@ -51,17 +51,16 @@ See Gatuzz et al. (2015) for details.
 CONTACT
 
 Please contact me with any reports or questions.
+
 egatuzz@mpe.mpg.de
 
 ISMabs Release Notes
+
 New in version 1.2 (May 2015):
 - The parameter names do not have mathematical operators.
 - The subroutine names in the fortran code have been changed.
 
 New in version 1.1 (Dec 2014): 
  - the startup now does not use the ifl parameter.
- - the model now prints a message to STDOUT if it is unable to
- read from the AtomicData.fits file.
- - the ISMABSROOT xset variable has been added to allow the
- location of the AtomicData.fits file to be changed from within
- XSPEC.
+ - the model now prints a message to STDOUT if it is unable to  read from the AtomicData.fits file.
+ - the ISMABSROOT xset variable has been added to allow the  location of the AtomicData.fits file to be changed from within  XSPEC.
