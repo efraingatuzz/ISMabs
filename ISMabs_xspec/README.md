@@ -47,6 +47,11 @@ HeI = 0.1 * H
 
 See Gatuzz et al. (2015) for details.
 
+CONTACT
+
+Please contact me with any reports or questions.
+egatuzz@mpe.mpg.de
+
 ISMabs Release Notes
 New in version 1.2 (May 2015):
 - The parameter names do not have mathematical operators.
