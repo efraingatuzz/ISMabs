@@ -16,7 +16,7 @@ Compared with previous photoabsorption models, which solely rely on neutral spec
 
 OBTAINING ISMabs:
 
-Different flavours of the model can be downloaded from the Github repository at https://github.com/efraingatuzz/ISMabs. Currently models include:
+Different flavours of the model can be downloaded from the Github repository at https://github.com/efraingatuzz/ISMabs. Currently versions include:
 
 - ISMabs_xspec: The ISMabs package (version 1.2) that appears in Gatuzz et al. (2015). It is included as part of the standard xspec software (from version 12.10). 
 - ISMabs_solar: A model with neutral metallic column densities set as relative to the hydrogen column densities (i.e. similar to TBabs) while column densities for single and double ionized species are included as parameters of the model.
