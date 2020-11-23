@@ -1,4 +1,5 @@
 #!/bin/bash
+#File to compile the ISMabs model
 
 # For Linux
 rm lib*
