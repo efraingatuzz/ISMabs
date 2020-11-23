@@ -1,4 +1,4 @@
-ISMabs_xspec: ISMabs model version 1.2 (the same version included as part of the standard XSPEC software). The contents of the ISMAabs_xspec include:
+ISMabs_xspec: ISMabs model version 1.2 (the same version included as part of the standard XSPEC software). The contents of the ISMAabs_xspec folder include:
 
 - atomic_data/AtomicData.fits  -- atomic database binary fits file. This must reside in the directory atomic_data inside the folder where the model is located.  
 - ismabs.f90 -- source code for ISMabs
@@ -37,24 +37,17 @@ xset ISMABSROOT /data/ismabs/
 
 then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSROOT over-rides any changes made by running compile.sh when building the model.
 
-The location of the file can be found by setting the XSPEC chatter level to 20 or higher - e.g.
-
-chatter 20
-
-before evaluating the model.
+The location of the file can be found by setting the XSPEC chatter level to 20 or higher (e.g. "chatter 20") before evaluating the model.
 
 PARAMETERS
 
-Inside of xspec, the model can be invoked by typing 'mo ismabs*pow' or variations on that.The input parameters included the elemental column densities and redshift.
-
-NOTE that the HeI column density is not a free parameter due to the constraining imposed to the model:
+Inside of xspec, the model can be invoked by typing 'mo ismabs*pow' or variations on that.The input parameters included the elemental column densities and redshift. NOTE that the HeI column density is not a free parameter due to the constraining imposed to the model:
 
 HeI = 0.1 * H
 
 See Gatuzz et al. (2015) for details.
 
 ISMabs Release Notes
-
 New in version 1.2 (May 2015):
 - The parameter names do not have mathematical operators.
 - The subroutine names in the fortran code have been changed.
