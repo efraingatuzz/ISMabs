@@ -1,14 +1,10 @@
 ISMabs_xspec: ISMabs model version 1.2 (the same version included as part of the standard XSPEC software). The contents of the ISMAabs_xspec include:
 
-atomic_data/AtomicData.fits  -- atomic database binary fits file. This must reside in the directory atomic_data inside the folder where the model is located.  
-
-ismabs.f90 -- source code for ISMabs
-
-lmodel_ismabs.dat -- local model definition file needed by xspec.  
-
-compile.sh -- installation script written on bash.
-
-README.md -- this file
+- atomic_data/AtomicData.fits  -- atomic database binary fits file. This must reside in the directory atomic_data inside the folder where the model is located.  
+- ismabs.f90 -- source code for ISMabs
+- lmodel_ismabs.dat -- local model definition file needed by xspec.  
+- compile.sh -- installation script written on bash.
+- README.md -- this file
 
 INSTALLATION
 
@@ -16,17 +12,11 @@ You can use the compile.sh file to install the model by doing
 
 sh compile.sh
 
-In the  model folder or you can setting up and using this 
-model is as described in the xspec manual:
-
+In the  model folder or you can setting up and using this model is as described in the xspec manual:
 
 0) You need to have the heasoft package installed on your machine, but it must be built from source. Local models cannot be installed from a binary installation.
-
 1) untar this directory somewhere in your user area
-
 2) setup your headas environment (eg. 'setenv HEADAS /path/to/architecture',and 'source \$HEADAS/headas-init.csh')
-
-
 3) start up xspec, and in response to the prompt type 
 
 'initpackage ismabs lmodel.dat <path-to-current-directory>',
