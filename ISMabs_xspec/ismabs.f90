@@ -2,14 +2,13 @@
 ! ISMABS
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption
+! See Gatuzz et al. (2015)
 ! Version 1.2 May 2015
-! (Without Ni and Zn in this version)
 !
 ! Additions to version 1.2
 ! - The parameter names do not have mathematical operators.
 ! - The subroutine names in the fortran code have been changed.
 ! - The lmodel.dat file has been rename to lmodel_ismabs.dat
-!
 !
 ! Additions to version 1.1
 ! - the model now prints a message to STDOUT if it is unable to
@@ -19,9 +18,7 @@
 ! X-Spec
 ! - the startup does not depend on the ifl parameter
 !
-! To-Do:
-! - Add turbulence
-! - Add molecular-solid cross sections
+!
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 subroutine ismabs(ear, ne, param, ifl, photar)
 !
@@ -46,16 +43,17 @@ version='1.2'
  if(startup)then
   print *, ' '
   print *, 'ISMabs: ISM absorption model Version',version
-  print *, 'Gatuzz, Garcia, Kallman, Mendoza, & Gorczyca (2014)'
+  print *, 'Gatuzz et al. (2015)'
   print *, 'Note: Default column densities are given'
   print *, 'according to Grevesse, N. & Sauval (1998)'     
   print *, 'assuming N_H = 1.E21 cm^-2'  
   print *, ' '
-  call read_cross_sections_ismabs( nemod,bxs,ifl)
-  call create_energy_grid_ismabs(1.d1,1.d4,bener,nemod) !Absorption coefficient calculation grid  = cross section grid
+  call read_cross_sections_ismabs( nemod,bxs,ifl) !To read the atomic data (photoabsorption cross-sections)
+  call create_energy_grid_ismabs(1.d1,1.d4,bener,nemod) !To create the same energy grid used for the cross-sections
   startup=.false.  
  endif
-! Model parameters
+ 
+! To set model parameters
 nH = param(1)
 N_He_0 = 0.1*nH
 N_He_1 = param(2)
@@ -91,7 +89,7 @@ rshift = param(31)
 zfac = 1/(1.d0+dble(rshift))
 
 
-
+!To compute the absorption coefficient for the energy grid
 call absorption_ismabs(nH, N_He_0, N_He_1, N_C_0, N_C_1, N_C_2, &
 N_N_0, N_N_1, N_N_2, N_O_0, N_O_1, N_O_2, &
 N_Ne_0, N_Ne_1, N_Ne_2, N_Mg_0, N_Mg_1, N_Mg_2, &
@@ -99,10 +97,12 @@ N_Si_0, N_Si_1, N_Si_2, N_S_0, N_S_1, N_S_2, &
 N_Ar_0, N_Ar_1, N_Ar_2, N_Ca_0, &
 N_Ca_1, N_Ca_2, N_Fe_0, &
 zfac, emod, nemod, coemod,bxs,cion,ifl,bener)
-!
+
+!To convert to the energy grid of the spectra analyzed
 call map_to_grid_ismabs(dble(ear),ne,emod,nemod,photar,coemod,ifl)
 return
 end subroutine ismabs
+!
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
 subroutine read_cross_sections_ismabs(bnene,xs,ifl)
 !
@@ -265,7 +265,7 @@ e1(i)=(bener(i)*zfac)/1.d3
 ! tau for hydrogen column density
 tmp=col*bxs2(0,i)
 ! Calculates the optical depth and the absorption coefficient exp(-tau)
-tmp= tmp+(bxs2(1,i)*0.1*col) ! He I column density = 0.1 Nh
+tmp= tmp+(bxs2(1,i)*0.1*col) ! He I column density = 0.1 Nh (See Gatuzz et al. 2015)
 do j=2,nion
 tmp=tmp+(cion(j)*bxs2(j,i)*1.d16)
 enddo
@@ -346,6 +346,7 @@ k=klo
 end subroutine dbinsrch_ismabs
 ! ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 subroutine create_energy_grid_ismabs(emin,emax,en,nen)
+!Subroutine to create the energy grid used by the photoabsorption cross-sections
 implicit none
 integer :: i, nen
 double precision :: en(nen)
