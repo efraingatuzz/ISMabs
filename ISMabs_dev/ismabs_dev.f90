@@ -3,10 +3,11 @@
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption
 ! Version 1.6 November 2020
-! (Without Ni and Zn in this version)
 !
 ! Additions to version 1.6
-! -Now the code includes the "fftw3" package included in heasoft.
+! - Now the code includes the "fftw3" package included in heasoft.
+! - Carbon photabsorption cross-section from Gatuzz et al. (2018) have been added (including the benchmarking described in the paper)
+! - Si I photoabsorption cross-section from Gatuzz et al (2020) have been added
 !
 ! Additions to version 1.5
 ! -Turbulence broadening is applied to the optical depth instead of each cross-section 
@@ -79,7 +80,7 @@ character (len=40) version
 version='dev'
  if(startup)then
   print *, ' '
-  print *, 'ISMabs: ISM absorption model develop Version'
+  print *, 'ISMabs: ISM absorption model develop version'
   print *, 'Gatuzz et al. (2015)'
   print *, 'Note: Default column densities are given'
   print *, 'according to Grevesse, N. & Sauval (1998)'     
@@ -577,7 +578,3 @@ logical :: startup=.true.
 
 
 end subroutine optical_depth_convolved_ismabs_dev
-
-
-
-
