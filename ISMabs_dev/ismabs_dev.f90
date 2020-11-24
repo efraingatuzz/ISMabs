@@ -55,8 +55,6 @@ subroutine ismabsdev(ear, ne, param, ifl, photar)
 !
 implicit none
 
- 
-
 
 integer,parameter :: num_param = 33, out_unit=20, nion=31
 integer,parameter :: nemod=650000 !Number of elements for each ion cross section.
@@ -138,8 +136,6 @@ N_Ar_0, N_Ar_1, N_Ar_2, N_Ca_0, &
 N_Ca_1, N_Ca_2, N_Fe_0, N_CO,   &
 zfac, emod, nemod, optical_depth,bxs,cion,ifl,bener)
 
- 
-
 !Compute absorption with original cross-sections (vturb=0)
 if (vturb.eq.0)then
 
@@ -162,9 +158,7 @@ coemod(i)=dexp(-optical_depth_convolved(i))
 enddo
  
 
-
 endif
-
 
  
 !To convert to the energy grid of the spectra analyzed
@@ -212,7 +206,6 @@ ismabs_root = trim(fgmstr('ISMABSROOT'))
 if (ismabs_root .EQ. '') then
 ismabs_root = local_dir
 endif
-
 
 
 ! parameters to specify the opening process
@@ -331,14 +324,11 @@ external hphoto, gphoto
  cion(30)=N_Fe_0
  cion(31)=N_CO
  
-
-
 !Calculates the optical depth and the absorption coefficient exp(-tau)
 col=col22*1.d22
 e1(0)=(bener(0)*zfac)/1.d3
 
 coeff(0)=0.0
-
 
 do i=1,bnene
 e1(i)=(bener(i)*zfac)/1.d3
@@ -349,8 +339,6 @@ tmp=col*bxs2(0,i)
 ! Calculates the optical depth and the absorption coefficient exp(-tau)
 tmp= tmp+(bxs2(1,i)*0.1*col) ! He I column density = 0.1 Nh
 do j=2,nion
-
- 
 
 tmp=tmp+(cion(j)*bxs2(j,i)*1.d16)
 enddo
@@ -570,8 +558,6 @@ logical :: startup=.true.
     cross_section_convolved(i) = real(h_1(aa)/((real(nemax))))
    aa=aa+1
    enddo
-
-
 
  call dfftw_cleanup()
 
