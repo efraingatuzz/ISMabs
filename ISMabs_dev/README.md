@@ -22,11 +22,11 @@ In the  model folder or you can setting up and using this model is as described 
 2) setup your headas environment (eg. 'setenv HEADAS /path/to/architecture',and 'source \$HEADAS/headas-init.csh')
 3) start up xspec, and in response to the prompt type 
 
-'initpackage ismabs_dev lmodel_ismabs_dev.dat <path-to-current-directory>',
+'initpackage ismabsdev lmodel_ismabs_dev.dat <path-to-current-directory>',
 
 where <path-to-current-directory> is the full path of the current directory. After the build is complete type 
 
-'lmod ismabs_dev <path-to-current-directory>'
+'lmod ismabsdev <path-to-current-directory>'
 
 In subsequent  sessions you don't neet to do the initpackage step again, just the lmod. The model is called "ismabsdev" inside XSPEC
 
