@@ -16,7 +16,33 @@ Compared with previous photoabsorption models, which solely rely on neutral spec
 
 OBTAINING ISMabs:
 
-Different flavours of the model can be downloaded from the Github repository at https://github.com/efraingatuzz/ISMabs. Currently versions include:
+Different flavours of the model can be downloaded from the Github repository at https://github.com/efraingatuzz/ISMabs. Please note thaat, because of the large files for the atomic data, you must clone the git repository in your local machine (i.e., if you download a zip file the atomic data will not be included). In order to clone the repository first you must install git and lfs
+
+To install git:
+
+Follow the instructions in https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+To install lfs
+
+1- Navigate through https://git-lfs.github.com/ and click in the download option
+
+2- On your computer, locate and unzip the downloaded file.
+
+3- Open Terminal and change the current working directory into the folder you downloaded and unzipped.
+
+4- To install the file, run the command "./install.sh" (without quotes)
+
+5- Verify that the installation was successful by running the command "git lfs install" (without quotes)
+
+To clone the ISMabs respository:
+
+1- Create a folder in your local machine where the model will be located
+
+2- Run the following command:
+git clone https://github.com/efraingatuzz/ISMabs
+
+
+Currently ISMabs versions include:
 
 - ISMabs_xspec: The ISMabs package (version 1.2) that appears in Gatuzz et al. (2015). It is included as part of the standard xspec software (from version 12.10). 
 - ISMabs_solar: A model with neutral metallic column densities set as relative to the hydrogen column densities (i.e. similar to TBabs) while column densities for single and double ionized species are included as parameters of the model.
