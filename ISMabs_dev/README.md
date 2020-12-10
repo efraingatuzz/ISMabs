@@ -11,9 +11,9 @@ The contents of the ISMAabs_dev folder include:
 
 INSTALLATION
 
-You can use the compile.sh file to install the model by doing
+You can use the compile.sh file to install the model by doing (depending on your OS)
 
-sh compile.sh
+sh compile_linux.sh/sh compile_mac.sh
 
 In the  model folder or you can setting up and using this model is as described in the xspec manual:
 
@@ -34,11 +34,11 @@ ATOMIC DATA
 
 With the default set up - that is, if you have run compile.sh, the model will look for the cross-section data file in atomic_data/AtomicData.fits, relative to the directory in which the module is located.
 
-The XSPEC xset command can be used to set the ISMABSROOT variable; if this is set then it is used instead of the path to the module. So after
+The XSPEC xset command can be used to set the ISMABSDEVROOT variable; if this is set then it is used instead of the path to the module. So after
 
-xset ISMABSROOT /data/ismabs_dev/
+xset ISMABSDEVROOT /data/ismabs_dev/
 
-then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSROOT over-rides any changes made by running compile.sh when building the model.
+then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSDEVROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSDEVROOT over-rides any changes made by running compile.sh when building the model.
 
 The location of the file can be found by setting the XSPEC chatter level to 20 or higher (e.g. "chatter 20") before evaluating the model.
 
@@ -56,11 +56,14 @@ Please contact me with any reports or questions.
 
 egatuzz@mpe.mpg.de
 
-ISMabs Release Notes
+ISMabsdev Release Notes
 
 New in version 1.6 (November 2020)
 - Now the model uses the "fftw3" package included in heasoft.
 - Si I photoabsorption cross-section from Gatuzz et al (2020) have been added
+- The atomic data is now stored in a .fits table with variable length (i.e. the file is smaller). The data is interpolated once when the model is called
+- Ni and Zn has been added
+- CO cross-section has been removed
 
 New in version 1.5 (July 20018)
 - Carbon photabsorption cross-section from Gatuzz et al. (2018) have been added (including the benchmarking described in the paper)

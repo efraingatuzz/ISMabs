@@ -9,9 +9,9 @@ ISMabs model version 1.2 (the same version included as part of the standard XSPE
 
 INSTALLATION
 
-You can use the compile.sh file to install the model by doing
+First, you need to decompress the "AtomicData.tar.gz" file inside the "atomic_data" folder (e.g. using untar). Then, you can use the compile.sh file to install the model by doing (depending on your OS)
 
-sh compile.sh
+sh compile_linux.sh/sh compile_mac.sh
 
 In the  model folder or you can setting up and using this model is as described in the xspec manual:
 
@@ -32,11 +32,11 @@ ATOMIC DATA
 
 With the default set up - that is, if you have run compile.sh, the model will look for the cross-section data file in atomic_data/AtomicData.fits, relative to the directory in which the module is located.
 
-The XSPEC xset command can be used to set the ISMABSROOT variable; if this is set then it is used instead of the path to the module. So after
+The XSPEC xset command can be used to set the ISMABSIONROOT variable; if this is set then it is used instead of the path to the module. So after
 
-xset ISMABSROOT /data/ismabs/
+xset ISMABSIONROOT /data/ismabs/
 
-then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSROOT over-rides any changes made by running compile.sh when building the model.
+then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSIONROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSIONROOT over-rides any changes made by running compile.sh when building the model.
 
 The location of the file can be found by setting the XSPEC chatter level to 20 or higher (e.g. "chatter 20") before evaluating the model.
 

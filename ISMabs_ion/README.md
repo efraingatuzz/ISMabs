@@ -44,7 +44,7 @@ The location of the file can be found by setting the XSPEC chatter level to 20 o
 
 PARAMETERS
 
-Inside of xspec, the model can be invoked by typing 'mo ismabsion*pow' or variations on that. The input parameters included the elemental column densities and redshift.
+Inside of xspec, the model can be invoked by typing 'mo ismabsion*pow' or variations on that. The input parameters included the hydrogen column density, column densities for singly/doubly ionized species and redshift.
 
 CONTACT
 
@@ -52,6 +52,9 @@ Please contact me with any reports or questions.
 
 egatuzz@mpe.mpg.de
 
+ISMabsion Release Notes
  
+New in version 1.1 (Nov 2020): 
+ - The atomic data is now stored in a .fits table with variable length (i.e. the file is smaller). The data is interpolated once when the model is called
 
 
