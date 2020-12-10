@@ -1,19 +1,19 @@
 # ISMabs_ion: 
 
-ISMabsion model, based on ISMabs (Gatuzz et al. 2015). This model computes column densities for neutral species assuming the XSPEC solar abundance. Column densities for ions and metallic iron are parameters of the model   
-  
+ISMabsion model, based on ISMabs (Gatuzz et al. 2015). This model computes column densities for neutral species assuming the XSPEC solar abundance. Column densities for ions and metallic iron are parameters of the model.
+
 The contents of the ISMAabs_ion folder include:
-- atomic_data/AtomicData.fits  -- atomic database binary fits file. This must reside in the directory atomic_data inside the folder where the model is located.  
+- atomic_data/AtomicData.fits  -- atomic database binary fits file. This must reside in the directory atomic_data inside the folder where the model is located.
 - ismabs_ion.f90 -- source code for ISMabsion
-- lmodel_ismabs_ion.dat -- local model definition file needed by xspec.  
+- lmodel_ismabs_ion.dat -- local model definition file needed by xspec.
 - compile.sh -- installation script written on bash.
 - README.md -- this file
 
 INSTALLATION
 
-You can use the compile.sh file to install the model by doing
+You can use the compile.sh file to install the model by doing (depending on your OS)
 
-sh compile.sh
+sh compile_linux.sh/sh compile_mac.sh
 
 In the  model folder or you can setting up and using this model is as described in the xspec manual:
 
@@ -28,23 +28,23 @@ where <path-to-current-directory> is the full path of the current directory. Aft
 
 'lmod ismabsion <path-to-current-directory>'
 
-In subsequent  sessions you don't neet to do the initpackage step again, just the lmod.  
+In subsequent  sessions you don't neet to do the initpackage step again, just the lmod.
 
 ATOMIC DATA 
 
 With the default set up - that is, if you have run compile.sh, the model will look for the cross-section data file in atomic_data/AtomicData.fits, relative to the directory in which the module is located.
 
-The XSPEC xset command can be used to set the ISMABSROOT variable; if this is set then it is used instead of the path to the module. So after
+The XSPEC xset command can be used to set the ISMABSIONROOT variable; if this is set then it is used instead of the path to the module. So after
 
-xset ISMABSROOT /data/ismabs_dev/
+xset ISMABSIONROOT /data/ismabs_dev/
 
-then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSROOT over-rides any changes made by running compile.sh when building the model.
+then the model will use the file /data/ismabs/atomic_data/AtomicData.fits (the ISMABSIONROOT refers to the directory containing the atomic_data/ directory). Note that ISMABSIONROOT over-rides any changes made by running compile.sh when building the model.
 
 The location of the file can be found by setting the XSPEC chatter level to 20 or higher (e.g. "chatter 20") before evaluating the model.
 
 PARAMETERS
 
-Inside of xspec, the model can be invoked by typing 'mo ismabsion*pow' or variations on that.The input parameters included the elemental column densities and redshift.  
+Inside of xspec, the model can be invoked by typing 'mo ismabsion*pow' or variations on that. The input parameters included the elemental column densities and redshift.
 
 CONTACT
 
