@@ -1,5 +1,5 @@
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-! ISMABS_ION
+! ismabsion
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption
 ! Version 1.1 August 2020
@@ -51,32 +51,32 @@ integer,parameter :: znm=100
 version='1.0'
  if(startup)then
   print *, ' '
-  print *, 'ISMabs_ion: ISM absorption model Version ',version
+  print *, 'ismabsion: ISM absorption model Version ',version
   print *, 'Based on Gatuzz et. al (2015)'
   print *, 'This version computes column densities for neutral ions using Nh'
   print *, 'Column densities for single and double ionized species'
   print *, 'are free paraemters'
   print *, 'Solar abundances are given according to XSPEC'     
   print *, ' '
-!  call read_cross_sections_ismabs_ion( nemod,bxs,ifl)
-  call read_atomic_data_header_ismabs_ion(atom_header)
-  call create_energy_grid_ismabs_ion(1.d1,1.d6,bener,nemod) !Absorption coefficient calculation grid  = cross section grid
+!  call read_cross_sections_ismabsion( nemod,bxs,ifl)
+  call read_atomic_data_header_ismabsion(atom_header)
+  call create_energy_grid_ismabsion(1.d1,1.d6,bener,nemod) !Absorption coefficient calculation grid  = cross section grid
 
 !  To read Hydrogen
 zn=1
 ii=1
-call read_one_cross_sections_ismabs_ion(atom_header(zn,ii),nnemod,bxs_crude,ener_crude,size_old_cross)
-call interpolate_cross_section_ismabs_ion(bxs_crude,(atom_header(zn,ii)-1),ener_crude,size_old_cross,bener,bxs_restored,zn,ii)
+call read_one_cross_sections_ismabsion(atom_header(zn,ii),nnemod,bxs_crude,ener_crude,size_old_cross)
+call interpolate_cross_section_ismabsion(bxs_crude,(atom_header(zn,ii)-1),ener_crude,size_old_cross,bener,bxs_restored,zn,ii)
 
  
-
+!To read Helium
 zn=2
   do ii=1,2,1 !Ion fractions
-  call read_one_cross_sections_ismabs_ion(atom_header(zn,ii),nnemod,bxs_crude,ener_crude,size_old_cross)
-  call interpolate_cross_section_ismabs_ion(bxs_crude,(atom_header(zn,ii)-1),ener_crude,size_old_cross,bener,bxs_restored,zn,ii)
+  call read_one_cross_sections_ismabsion(atom_header(zn,ii),nnemod,bxs_crude,ener_crude,size_old_cross)
+  call interpolate_cross_section_ismabsion(bxs_crude,(atom_header(zn,ii)-1),ener_crude,size_old_cross,bener,bxs_restored,zn,ii)
   enddo 
 
-
+!To read metals
 do zn=6,30,1 !Nuclear charge
 
 
@@ -85,15 +85,15 @@ do zn=6,30,1 !Nuclear charge
  .or.zn.eq.20.or.zn.eq.28.or.zn.eq.30)then 
 
   do ii=1,3,1 !Ion fractions
-  call read_one_cross_sections_ismabs_ion(atom_header(zn,ii),nnemod,bxs_crude,ener_crude,size_old_cross)
-  call interpolate_cross_section_ismabs_ion(bxs_crude,(atom_header(zn,ii)-1),ener_crude,size_old_cross,bener,bxs_restored,zn,ii)
+  call read_one_cross_sections_ismabsion(atom_header(zn,ii),nnemod,bxs_crude,ener_crude,size_old_cross)
+  call interpolate_cross_section_ismabsion(bxs_crude,(atom_header(zn,ii)-1),ener_crude,size_old_cross,bener,bxs_restored,zn,ii)
   enddo 
  endif
 enddo  
 
 !  To read Solid Iron
-call read_one_cross_sections_ismabs_ion(37,nnemod,bxs_crude,ener_crude,size_old_cross)
-call interpolate_cross_section_ismabs_ion(bxs_crude,36,ener_crude,size_old_cross,bener,bxs_restored,26,26)
+call read_one_cross_sections_ismabsion(37,nnemod,bxs_crude,ener_crude,size_old_cross)
+call interpolate_cross_section_ismabsion(bxs_crude,36,ener_crude,size_old_cross,bener,bxs_restored,26,26)
  
   startup=.false.  
  endif
@@ -129,7 +129,7 @@ rshift = param(26)
 zfac = 1/(1.d0+dble(rshift))
 
  
-call absorption_ismabs_ion(nH, N_He_1, N_C_1, N_C_2, &
+call absorption_ismabsion(nH, N_He_1, N_C_1, N_C_2, &
  N_N_1, N_N_2,  N_O_1, N_O_2, &
  N_Ne_1, N_Ne_2,  N_Mg_1, N_Mg_2, &
  N_Si_1, N_Si_2,  N_S_1, N_S_2, &
@@ -138,7 +138,7 @@ call absorption_ismabs_ion(nH, N_He_1, N_C_1, N_C_2, &
  N_Fe_0, &
 zfac, emod, nemod, coemod,bxs_restored,cion,ifl,bener)
 
-call map_to_grid_ismabs_ion(dble(ear),ne,emod,nemod,photar,coemod,ifl)
+call map_to_grid_ismabsion(dble(ear),ne,emod,nemod,photar,coemod,ifl)
 return
 end subroutine ismabsion
  
@@ -147,7 +147,7 @@ end subroutine ismabsion
 !!!!!!!TO READ ATOMIC DATA HEADER!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine read_atomic_data_header_ismabs_ion(atom_header)
+subroutine read_atomic_data_header_ismabsion(atom_header)
 !
 ! This routine reads the atomic data IDs from first header
 ! on atomic data file
@@ -159,11 +159,11 @@ integer ::   i,  status
 double precision :: z(nion), charge(nion), column_id(nion)
 integer :: atom_header(30,30)
  character (*), parameter :: fileloc = '/atomic_data/AtomicData.fits'
- character (*), parameter :: ismreadchat = 'ismabs_ion: reading from '
+ character (*), parameter :: ismreadchat = 'ismabsion: reading from '
  character (len=255 + 29) :: filename2 ! len(fileloc)
 
 
- character (len=255) :: ioneq_root = ''
+ character (len=255) :: ismabsion_root = ''
  character (len=len(ismreadchat)+len(filename2)) :: chatmsg = ''
 integer inunit,readwrite,blocksize
 integer :: hdutype
@@ -175,15 +175,15 @@ character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/is
  
  
 ! Where do we look for the data?
-ioneq_root = trim(fgmstr('ISMABSIONROOT'))
-if (ioneq_root .EQ. '') then
-ioneq_root = local_dir
+ismabsion_root = trim(fgmstr('ISMABSIONROOT'))
+if (ismabsion_root .EQ. '') then
+ismabsion_root = local_dir
 endif
 ! parameters to specify the opening process
 status=0
 readwrite=0
 blocksize=1
-filename2=trim(ioneq_root) // fileloc
+filename2=trim(ismabsion_root) // fileloc
  chatmsg=ismreadchat // filename2
 call xwrite(chatmsg, 20)
 ! Get an unused Logical Unit Number to use to open the FITS file.
@@ -220,7 +220,7 @@ endif
 ! Close the file and free the unit number
 call ftclos(inunit, status)
 call ftfiou(-1, status)
-end subroutine read_atomic_data_header_ismabs_ion
+end subroutine read_atomic_data_header_ismabsion
 ! ======================================= !
 
 ! ======================================= !
@@ -233,7 +233,7 @@ end subroutine read_atomic_data_header_ismabs_ion
 
 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
-subroutine read_one_cross_sections_ismabs_ion(column_number,bnene,xs,ener,nelemm)
+subroutine read_one_cross_sections_ismabsion(column_number,bnene,xs,ener,nelemm)
 !
 ! This routine reads all cross sections and puts them on a given grid
 !
@@ -256,7 +256,7 @@ double precision :: ener(0:nion,bnene), xs(0:nion,bnene)
  character (len=255 + 29) :: filename2 ! len(fileloc)
 
  
-  character (len=255) :: ioneq_root = ''
+  character (len=255) :: ismabsion_root = ''
  character (len=len(ismreadchat)+len(filename2)) :: chatmsg = ''
 integer inunit,readwrite,blocksize,nelemm,offset
 integer :: hdutype
@@ -271,15 +271,15 @@ do i=0,nion
 nemax(i)=650000
 enddo
 ! Where do we look for the data?
-ioneq_root = trim(fgmstr('IONEQROOT'))
-if (ioneq_root .EQ. '') then
-ioneq_root = local_dir
+ismabsion_root = trim(fgmstr('ISMABSIONROOT'))
+if (ismabsion_root .EQ. '') then
+ismabsion_root = local_dir
 endif
 ! parameters to specify the opening process
 status=0
 readwrite=0
 blocksize=1
-filename2=trim(ioneq_root) // fileloc
+filename2=trim(ismabsion_root) // fileloc
  chatmsg=ismreadchat // filename2
 call xwrite(chatmsg, 20)
 ! Get an unused Logical Unit Number to use to open the FITS file.
@@ -318,11 +318,11 @@ endif
 ! Close the file and free the unit number
 call ftclos(inunit, status)
 call ftfiou(-1, status)
-end subroutine read_one_cross_sections_ismabs_ion
+end subroutine read_one_cross_sections_ismabsion
 
 
 ! ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-subroutine interpolate_cross_section_ismabs_ion(xs,j,ener,maxi,bener2,bxs_restored,zn,ii)
+subroutine interpolate_cross_section_ismabsion(xs,j,ener,maxi,bener2,bxs_restored,zn,ii)
 ! xs -> old cross section
 ! j --> ion
 ! ener --> old energy
@@ -369,12 +369,12 @@ subroutine interpolate_cross_section_ismabs_ion(xs,j,ener,maxi,bener2,bxs_restor
                        s=xs(j,k)
         endif
         if(bener2(i).lt.ener(j,1))then
-                         call phfit2_b(zn,zn-ii+1,1,REAL(bener2(i)),SS,thresh) 
+                         call phfit2_b_ismabsion(zn,zn-ii+1,1,REAL(bener2(i)),SS,thresh) 
                          s=DBLE(SS*1.d-18)
         endif 
 
         if(bener2(i).gt.ener(j,maxi))then
-                         call phfit2_b(zn,zn-ii+1,1,REAL(bener2(i)),SS,thresh) 
+                         call phfit2_b_ismabsion(zn,zn-ii+1,1,REAL(bener2(i)),SS,thresh) 
                          s=DBLE(SS*1.d-18)
         endif 
         
@@ -382,10 +382,10 @@ subroutine interpolate_cross_section_ismabs_ion(xs,j,ener,maxi,bener2,bxs_restor
         
       enddo
 
-end subroutine interpolate_cross_section_ismabs_ion
+end subroutine interpolate_cross_section_ismabsion
 
 
-subroutine absorption_ismabs_ion(col22,N_He_1, N_C_1, N_C_2, &
+subroutine absorption_ismabsion(col22,N_He_1, N_C_1, N_C_2, &
  N_N_1, N_N_2,  N_O_1, N_O_2, &
  N_Ne_1, N_Ne_2,  N_Mg_1, N_Mg_2, &
  N_Si_1, N_Si_2,  N_S_1, N_S_2, &
@@ -480,13 +480,13 @@ do i=1,bnene
 enddo
 
 
-end subroutine absorption_ismabs_ion
+end subroutine absorption_ismabsion
 
  
 
 
 ! ======================================= !
-subroutine map_to_grid_ismabs_ion(new_en,nne,old_en, one, nflux, old_flu,ifl)
+subroutine map_to_grid_ismabsion(new_en,nne,old_en, one, nflux, old_flu,ifl)
 ! This routine map to a given grid
 implicit none
 integer :: i, j, k, one, nne, bmin, bmax,ifl
@@ -529,9 +529,9 @@ do i=1,nne
         endif
         nflux(i)=real(s)
 enddo
-end subroutine map_to_grid_ismabs_ion
+end subroutine map_to_grid_ismabsion
 ! ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-subroutine dbinsrch_ismabs_ion(e,k,ener,n)
+subroutine dbinsrch_ismabsion(e,k,ener,n)
 !
 ! search for energy e in array ener(1:n) and return bin k for
 ! which ener(k).le.e.lt.ener(k+1)
@@ -557,9 +557,9 @@ print *,'Energy out of bounds. Should not happen'
 stop
 endif
 k=klo
-end subroutine dbinsrch_ismabs_ion
+end subroutine dbinsrch_ismabsion
 ! ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-subroutine create_energy_grid_ismabs_ion(emin,emax,en,nen)
+subroutine create_energy_grid_ismabsion(emin,emax,en,nen)
 implicit none
 integer :: i, nen
 double precision :: en(nen)
@@ -569,12 +569,12 @@ do i=1,nen
 en(i)=10**(((log10(emax)-log10(emin))*real(i)/nen)+log10(emin))
 enddo
 !
-end subroutine create_energy_grid_ismabs_ion
+end subroutine create_energy_grid_ismabsion
 
 
 
 !==========================================================================
-      subroutine phfit2_b(nz,ne_int,is,e_photo,s_photo,thresh)
+      subroutine phfit2_b_ismabsion(nz,ne_int,is,e_photo,s_photo,thresh)
 !*** the parameters list modified by MG; Sun Nov 10 17:50:58 MSK 1996
 !*** thresh - ionization energy in eV
 !***
@@ -663,7 +663,7 @@ end subroutine create_energy_grid_ismabs_ion
 !         print *,ph2(2,nz,ne_int),nz,ne_int
       endif
       return
-      end subroutine phfit2_b
+      end subroutine phfit2_b_ismabsion
 
 !=======================================================
       BLOCK DATA BDATA
