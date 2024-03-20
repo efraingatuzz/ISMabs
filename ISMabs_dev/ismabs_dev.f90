@@ -2,7 +2,15 @@
 ! ISMABS
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption
-! Version 1.6 November 2020
+! Version 1.8 March 2024
+!
+! Additions to version 1.8
+! - Argon cross-section from Gatuzz et al. (2024b, in preparation)
+! - Sulphur cross-sections from Gatuzz et al. (2024a)
+! 
+! Additions to version 1.7
+! - New iron atomic data included (FeI, FeII and FeIII) from Tim Kallman
+! - New Nitrogen atomic data from Gatuzz et al. (2021) included
 !
 ! Additions to version 1.6
 ! - Now the code includes the "fftw3" package included in heasoft.
@@ -58,7 +66,7 @@ subroutine ismabsdev(ear, ne, param, ifl, photar)
 ! The main routine to call all subroutines
 !
 implicit none
-integer,parameter :: num_param = 38, out_unit=20, nion=36
+integer,parameter :: num_param = 41, out_unit=20, nion=39
 integer,parameter :: nemod=650000, nnemod=350000 !Number of elements for each ion cross section.
 integer :: ne, ifl, i, size_old_cross
 double precision :: nH, rshift, emod(1:nemod), coemod(0:nemod), cion(nion), bener(1:nemod)
@@ -72,6 +80,7 @@ double precision :: N_Ar_0, N_Ar_1, N_Ar_2, N_Ca_0
 double precision :: N_Ca_1, N_Ca_2, N_Fe_0
 double precision :: N_Ni_0, N_Ni_1, N_Ni_2
 double precision :: N_Zn_0, N_Zn_1, N_Zn_2
+double precision :: N_Fe_1, N_Fe_2, N_Fe_3
 double precision :: bxs_restored(0:nion,nemod),bxs_crude(0:nion,nnemod)  
 double precision :: ener_crude(0:nion,nnemod)
 double precision :: vturb,zfac,temp1
@@ -128,6 +137,28 @@ enddo
 !  To read Solid Iron
 call read_one_cross_sections_ismabsdev(37,nnemod,bxs_crude,ener_crude,size_old_cross)
 call interpolate_cross_section_ismabsdev(bxs_crude,36,ener_crude,size_old_cross,bener,bxs_restored,26,26)
+
+!  To read FeI
+call read_one_cross_sections_ismabsdev(38,nnemod,bxs_crude,ener_crude,size_old_cross)
+call interpolate_cross_section_ismabsdev(bxs_crude,37,ener_crude,size_old_cross,bener,bxs_restored,26,1)
+
+!To check that cross-section is read
+
+! open (unit=20,file="FeI.txt",action="write",status="replace") 
+! do i=1,nemod
+! write(20,*)bener(i),bxs_restored(38,i)
+! enddo 
+! close(out_unit) 
+
+!  To read FeII
+call read_one_cross_sections_ismabsdev(39,nnemod,bxs_crude,ener_crude,size_old_cross)
+call interpolate_cross_section_ismabsdev(bxs_crude,38,ener_crude,size_old_cross,bener,bxs_restored,26,2)
+ 
+
+!  To read FeII
+call read_one_cross_sections_ismabsdev(40,nnemod,bxs_crude,ener_crude,size_old_cross)
+call interpolate_cross_section_ismabsdev(bxs_crude,39,ener_crude,size_old_cross,bener,bxs_restored,26,3)
+ 
  
   startup=.false.  
  endif
@@ -174,8 +205,11 @@ N_Zn_0 = param(33)
 N_Zn_1 = param(34)
 N_Zn_2 = param(35)
 N_Fe_0 = param(36)
-vturb=param(37)
-rshift = param(38)
+N_Fe_1 = param(37)
+N_Fe_2 = param(38)
+N_Fe_3 = param(39)
+vturb=param(40)
+rshift = param(41)
 zfac = 1/(1.d0+dble(rshift))
 
 !To compute the absorption coefficient for the energy grid
@@ -187,6 +221,7 @@ N_Ar_0, N_Ar_1, N_Ar_2, N_Ca_0, &
 N_Ca_1, N_Ca_2, N_Fe_0,  &
 N_Ni_0, N_Ni_1, N_Ni_2, &
 N_Zn_0, N_Zn_1, N_Zn_2, &
+N_Fe_1, N_Fe_2, N_Fe_3, &
 zfac, emod, nemod, optical_depth,bxs_restored,cion,ifl,bener)
 
 !Compute absorption with original cross-sections (vturb=0)
@@ -233,7 +268,7 @@ subroutine read_atomic_data_header_ismabsdev(atom_header)
 !
 !
 implicit none
-integer,parameter :: nion=36, out_unit=20
+integer,parameter :: nion=39, out_unit=20
 integer ::   i,  status
 double precision :: z(nion), charge(nion), column_id(nion)
 integer :: atom_header(30,30)
@@ -250,7 +285,7 @@ integer :: felem=1, nulld=0
 logical :: anynull
  character (len=255) :: fgmstr
 external :: fgmstr
-character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev'
+character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev.v1.8'
  
  
 ! Where do we look for the data?
@@ -325,7 +360,7 @@ subroutine read_one_cross_sections_ismabsdev(column_number,bnene,xs,ener,nelemm)
 ! <path>/atomic_data/AtomicData.fits
 !
 implicit none
-integer,parameter :: nion=36, out_unit=20
+integer,parameter :: nion=39, out_unit=20
 integer :: bnene,  i, j, status,column_number
 integer :: nemax(0:nion)  
 double precision :: ener(0:nion,bnene), xs(0:nion,bnene) 
@@ -343,7 +378,7 @@ integer :: nulld=0, logical_start(0:nion)
 logical :: anynull
  character (len=255) :: fgmstr
 external :: fgmstr
-character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev' 
+character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev.v1.8' 
 
 !Number of elements for each ion cross section.
 do i=0,nion
@@ -412,7 +447,7 @@ subroutine interpolate_cross_section_ismabsdev(xs,j,ener,maxi,bener2,bxs_restore
 ! ii --> atomic state (1=neutral, 2=singly ionized, 3=double ionized, etc.)
    implicit none
 
-   integer,parameter :: nene=650000, out_unit=20,nion=36
+   integer,parameter :: nene=650000, out_unit=20,nion=39
    integer :: maxi,   i, j, k, r, zn, ii
    double precision :: stemp, etemp,s ,etemp2 
    double precision :: ener(0:nion,maxi), xs(0:nion,maxi),bxs_restored(0:nion,nene) 
@@ -480,13 +515,14 @@ N_Ar_0, N_Ar_1, N_Ar_2, N_Ca_0, &
 N_Ca_1, N_Ca_2, N_Fe_0, &
 N_Ni_0, N_Ni_1, N_Ni_2, &
 N_Zn_0, N_Zn_1, N_Zn_2, &
+N_Fe_1, N_Fe_2, N_Fe_3, &
 zfac, e1, bnene, coeff, bxs2,cion,ifl,bener)
 !
 ! This is routine that calculates the optical depth given the column densities
 ! Finally returns the absorption coefficient exp(-tau)
 !
 implicit none
-integer,parameter :: nion=36, out_unit=20
+integer,parameter :: nion=39, out_unit=20
 integer :: bnene, ifl
 integer :: i, j
 double precision :: col22, col, tmp, cion(nion)
@@ -500,6 +536,7 @@ double precision :: N_Ar_0, N_Ar_1, N_Ar_2, N_Ca_0
 double precision :: N_Ca_1, N_Ca_2, N_Fe_0
 double precision :: N_Ni_0, N_Ni_1, N_Ni_2
 double precision :: N_Zn_0, N_Zn_1, N_Zn_2
+double precision :: N_Fe_1, N_Fe_2, N_Fe_3
 double precision :: zfac
 real hphoto, gphoto
 external hphoto, gphoto
@@ -542,7 +579,9 @@ external hphoto, gphoto
  cion(34)=N_Zn_1
  cion(35)=N_Zn_2
  cion(36)=N_Fe_0
- 
+ cion(37)=N_Fe_1*1.d-18 !To convert from Mbarn to cm-2
+ cion(38)=N_Fe_2*1.d-18 !To convert from Mbarn to cm-2
+ cion(39)=N_Fe_3*1.d-18 !To convert from Mbarn to cm-2
  
 
 
@@ -665,7 +704,7 @@ subroutine optical_depth_convolved_ismabsdev( nemax, bxs2,energy,vturb,cross_sec
 implicit none
 
  
-integer,parameter :: nion=36, out_unit=20
+integer,parameter :: nion=39, out_unit=20
 integer :: i,nemax,aa
 double precision :: bxs2(0:nemax)
 double precision ::  vturb
