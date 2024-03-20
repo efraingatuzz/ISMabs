@@ -58,6 +58,15 @@ egatuzz@mpe.mpg.de
 
 ISMabsdev Release Notes
 
+New in version 1.8 (March 2024)
+- Argon cross-section from Gatuzz et al. (2024b, in preparation)
+- Sulphur cross-sections from Gatuzz et al. (2024a)
+
+New in version 1.7 (November 2021)
+- New iron atomic data included (FeI, FeII and FeIII) from Tim Kallman
+- New Nitrogen atomic data from Gatuzz et al. (2021) included
+
+
 New in version 1.6 (November 2020)
 - Now the model uses the "fftw3" package included in heasoft.
 - Si I photoabsorption cross-section from Gatuzz et al (2020) have been added
@@ -82,4 +91,5 @@ New in version 1.1 (Dec 2014):
  - the startup now does not use the ifl parameter.
  - the model now prints a message to STDOUT if it is unable to  read from the AtomicData.fits file.
  - the ISMABSROOT xset variable has been added to allow the  location of the AtomicData.fits file to be changed from within  XSPEC.
+
 
