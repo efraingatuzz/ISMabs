@@ -108,8 +108,8 @@ subroutine read_cross_sections_ismabsiron(bnene, xs, ifl)
   nemax = 650000
 
   !--- Define data root location
-  local_dir1 = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_species/i'
-  local_dir2 = 'smabs.iron.dev'
+  local_dir1 = '/media/efrain/DATA/softwares/github/ISMabs/ISMabs_individual_ions/ismabs.iron.de'
+  local_dir2 = 'v'
   ismabsiron_root = trim(local_dir1) // trim(local_dir2)
   filename2 = trim(ismabsiron_root) // fileloc
   chatmsg = trim(ismreadchat) // trim(filename2)

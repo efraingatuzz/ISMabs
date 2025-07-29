@@ -64,8 +64,8 @@ double precision :: ener(0:nion,bnene), xs(0:nion,bnene)
 character (*), parameter :: fileloc = '/atomic_data/AtomicData.fits'
 character (*), parameter :: ismreadchat = 'ismabs: reading from '
 character (len=255 + 29) :: filename2 ! len(fileloc)
-character (len=1024) :: local_dir1 = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_species/i'
-character (len=1024) :: local_dir2 = 'smabs.hydrogen'
+character (len=1024) :: local_dir1 = '/media/efrain/DATA/softwares/github/ISMabs/ISMabs_individual_ions/ismabs.hydroge'
+character (len=1024) :: local_dir2 = 'n'
 character (len=1024) :: ismabshydrogen_root   
 character (len=1024) :: local_dir
 character (len=len(ismreadchat)+len(filename2)) :: chatmsg = ''
@@ -153,7 +153,8 @@ double precision :: col22, col, tmp, cion(nion)
 double precision :: bener(0:bnene), bxs2(0:nion,bnene), e1(0:bnene)
 double precision :: tau, coeff(0:bnene) 
 double precision :: zfac 
-
+real hphoto, gphoto,fgabnz
+external hphoto, gphoto,fgabnz
 
 ! Calculates the optical depth and the absorption coefficient exp(-tau)
 col=col22*1.d22
