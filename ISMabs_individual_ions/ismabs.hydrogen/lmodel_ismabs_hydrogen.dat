@@ -1,0 +1,3 @@
+ismabshydrogen       2   0.01    1.e6      ismabshydrogen     mul  0
+H       10^22  0.1     0.    0.    1E5   1E6    1E-3 
+redshift  " "    0.0    -1.0  0.0  10.   10.    -0.01
