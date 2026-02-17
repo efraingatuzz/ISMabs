@@ -2,10 +2,13 @@
 ! ISMABS
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption
-! Version 1.8 March 2024
+! Version 1.9 February 2026
+!
+! Additions to version 1.9
+! - We added the "use xsfortran" line to call all fortran routines included in xspec (valid for XSPEC 12.15.1)
 !
 ! Additions to version 1.8
-! - Argon cross-section from Gatuzz et al. (2024b, in preparation)
+! - Argon cross-section from Gatuzz et al. (2024b)
 ! - Sulphur cross-sections from Gatuzz et al. (2024a)
 ! 
 ! Additions to version 1.7
@@ -267,6 +270,8 @@ subroutine read_atomic_data_header_ismabsdev(atom_header)
 ! on atomic data file
 !
 !
+
+use xsfortran
 implicit none
 integer,parameter :: nion=39, out_unit=20
 integer ::   i,  status
@@ -283,13 +288,13 @@ integer inunit,readwrite,blocksize
 integer :: hdutype
 integer :: felem=1, nulld=0
 logical :: anynull
- character (len=255) :: fgmstr
-external :: fgmstr
-character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev.v1.8'
+! character (len=255) :: FGMSTR
+!external :: FGMSTR
+character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev.v1.9'
  
  
 ! Where do we look for the data?
-ismabsdev = trim(fgmstr('ISMABSDEVROOT'))
+ismabsdev = trim(FGMSTR('ISMABSDEVROOT'))
 if (ismabsdev .EQ. '') then
 ismabsdev = local_dir
 endif
@@ -359,6 +364,8 @@ subroutine read_one_cross_sections_ismabsdev(column_number,bnene,xs,ener,nelemm)
 ! the atomic_data/ directory - i.e. it loads
 ! <path>/atomic_data/AtomicData.fits
 !
+
+use xsfortran
 implicit none
 integer,parameter :: nion=39, out_unit=20
 integer :: bnene,  i, j, status,column_number
@@ -376,16 +383,16 @@ integer inunit,readwrite,blocksize,nelemm,offset
 integer :: hdutype
 integer :: nulld=0, logical_start(0:nion)
 logical :: anynull
- character (len=255) :: fgmstr
-external :: fgmstr
-character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev.v1.8' 
+! character (len=255) :: FGMSTR
+!external :: FGMSTR
+character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_turb/ismabs.dev.v1.9' 
 
 !Number of elements for each ion cross section.
 do i=0,nion
 nemax(i)=650000
 enddo
 ! Where do we look for the data?
-ismabsdev = trim(fgmstr('ISMABSDEVROOT'))
+ismabsdev = trim(FGMSTR('ISMABSDEVROOT'))
 if (ismabsdev .EQ. '') then
 ismabsdev = local_dir
 endif
@@ -445,6 +452,7 @@ subroutine interpolate_cross_section_ismabsdev(xs,j,ener,maxi,bener2,bxs_restore
 ! bxs_restored -->new cross-section
 ! zn --> atomic number
 ! ii --> atomic state (1=neutral, 2=singly ionized, 3=double ionized, etc.)
+   
    implicit none
 
    integer,parameter :: nene=650000, out_unit=20,nion=39
@@ -521,6 +529,7 @@ zfac, e1, bnene, coeff, bxs2,cion,ifl,bener)
 ! This is routine that calculates the optical depth given the column densities
 ! Finally returns the absorption coefficient exp(-tau)
 !
+
 implicit none
 integer,parameter :: nion=39, out_unit=20
 integer :: bnene, ifl
@@ -615,6 +624,7 @@ end subroutine absorption_ismabsdev
 ! ======================================= !
 subroutine map_to_grid_ismabsdev(new_en,nne,old_en, one, nflux, old_flu,ifl)
 ! This routine map to a given grid
+
 implicit none
 integer :: i, j, k, one, nne, bmin, bmax,ifl
 double precision :: new_en(0:nne)
@@ -662,6 +672,7 @@ subroutine dbinsrch_ismabsdev(e,k,ener,n)
 ! which ener(k).le.e.lt.ener(k+1)
 ! adapted from J. Wilms's tbvabs_new.f routine
 !
+
 implicit none
 double precision :: e
 integer :: n,k,klo,khi
@@ -685,6 +696,7 @@ k=klo
 end subroutine dbinsrch_ismabsdev
 ! ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 subroutine create_energy_grid_ismabsdev(emin,emax,en,nen)
+
 implicit none
 integer :: i, nen
 double precision :: en(nen)
@@ -863,6 +875,7 @@ end subroutine optical_depth_convolved_ismabsdev
 !******************************************************************************
 !! ADDED TO THE ORIGINAL CODE !!
 
+      
       implicit none 
       integer :: l,ninn,ntot,nint,nout
       real :: ph1,ph2,a,b,einn,p1,q,x,y,z
@@ -2822,4 +2835,3 @@ end subroutine optical_depth_convolved_ismabsdev
       DATA (PH2(I,26,25),I=1,7) /1.761E-01, 4.365E+03,6.298E+03, 5.204E+00, 1.141E+01, 9.272E+01, 1.075E+02/
       DATA (PH2(I,26,26),I=1,7) /5.461E-02, 3.062E-01,2.671E+07, 7.923E+00, 2.069E+01, 1.382E+02, 2.481E-01/
       END
-
