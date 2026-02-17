@@ -2,6 +2,11 @@
 ! ismabsion
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption
+! Version 1.2 February 2026
+!
+! Additions to version 1.2
+! - We added the "use xsfortran" line to call all fortran routines included in xspec (valid for XSPEC 12.15.1)
+!
 ! Version 1.1 August 2020
 !  
 ! This model computes column densities for neutral elements
@@ -153,6 +158,7 @@ subroutine read_atomic_data_header_ismabsion(atom_header)
 ! on atomic data file
 !
 !
+use xsfortran
 implicit none
 integer,parameter :: nion=36, out_unit=20
 integer ::   i,  status
@@ -169,9 +175,9 @@ integer inunit,readwrite,blocksize
 integer :: hdutype
 integer :: felem=1, nulld=0
 logical :: anynull
- character (len=255) :: fgmstr
-external :: fgmstr
-character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_ions/ismabs_ions.v1.1'
+! character (len=255) :: fgmstr
+!external :: fgmstr
+character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_ions/ismabs_ions.v1.2'
  
  
 ! Where do we look for the data?
@@ -245,6 +251,7 @@ subroutine read_one_cross_sections_ismabsion(column_number,bnene,xs,ener,nelemm)
 ! the atomic_data/ directory - i.e. it loads
 ! <path>/atomic_data/AtomicData.fits
 !
+use xsfortran
 implicit none
 integer,parameter :: nion=36, out_unit=20
 integer :: bnene,  i, j, status,column_number
@@ -262,9 +269,9 @@ integer inunit,readwrite,blocksize,nelemm,offset
 integer :: hdutype
 integer :: nulld=0, logical_start(0:nion)
 logical :: anynull
- character (len=255) :: fgmstr
-external :: fgmstr
-character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_ions/ismabs_ions.v1.1' 
+! character (len=255) :: fgmstr
+!external :: fgmstr
+character (len=240) :: local_dir = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_ions/ismabs_ions.v1.2' 
 
 !Number of elements for each ion cross section.
 do i=0,nion
@@ -397,6 +404,7 @@ zfac, e1, bnene, coeff, bxs2,cion,ifl,bener)
 ! This is routine that calculates the optical depth given the column densities
 ! Finally returns the absorption coefficient exp(-tau)
 !
+use xsfortran
 implicit none
 integer,parameter :: nion=36, out_unit=20
 integer :: bnene, ifl
@@ -412,8 +420,9 @@ double precision :: N_Ar_1, N_Ar_2
 double precision :: N_Ca_1, N_Ca_2, N_Fe_0
 double precision :: N_Ni_1, N_Ni_2, N_Zn_1, N_Zn_2
 double precision :: zfac
-real hphoto, gphoto,fgabnz,thresh
-external hphoto, gphoto,fgabnz
+real thresh
+!real hphoto, gphoto,fgabnz
+!external hphoto, gphoto,fgabnz
 
  
 thresh=0.0
