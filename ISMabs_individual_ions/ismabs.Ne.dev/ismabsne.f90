@@ -2,6 +2,11 @@
 ! ismabsne
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption due to neon
+! Version 1.1 February 2026
+!
+! Additions to version 1.1
+! - We added the "use xsfortran" line to call all fortran routines included in xspec (valid for XSPEC 12.15.1)
+!
 ! Version 1.0 July 2025 
 !
 ! - This version only has CI-CVI as free parameters. 
@@ -63,7 +68,7 @@ subroutine read_cross_sections_ismabsne(bnene, xs, ifl)
   ! Looks for the file at:
   !     <ismabsne_root>/atomic_data/AtomicData.fits
   !---------------------------------------------------------------------
-
+  use xsfortran
   implicit none
   integer, parameter :: nion = 10, out_unit = 20
   integer, intent(in)  :: bnene, ifl
@@ -87,7 +92,7 @@ subroutine read_cross_sections_ismabsne(bnene, xs, ifl)
 
   !--- Define data root location
   local_dir1 = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_species/i'
-  local_dir2 = 'smabs.Ne.dev'
+  local_dir2 = 'smabs.Ne/v1.1'
   ismabsne_root = trim(local_dir1) // trim(local_dir2)
   filename2 = trim(ismabsne_root) // fileloc
   chatmsg = trim(ismreadchat) // trim(filename2)
