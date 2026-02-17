@@ -2,6 +2,11 @@
 ! ismabsar
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption due to argon
+! Version 1.1 February 2026
+!
+! Additions to version 1.1
+! - We added the "use xsfortran" line to call all fortran routines included in xspec (valid for XSPEC 12.15.1)
+!
 ! Version 1.0 July 2025 
 !
 ! - This version only has CI-CVI as free parameters. 
@@ -74,7 +79,7 @@ subroutine read_cross_sections_ismabsar(bnene, xs, ifl)
   ! Looks for the file at:
   !     <ismabsar_root>/atomic_data/AtomicData.fits
   !---------------------------------------------------------------------
-
+  use xsfortran
   implicit none
   integer, parameter :: nion = 18, out_unit = 20
   integer, intent(in)  :: bnene, ifl
@@ -98,7 +103,7 @@ subroutine read_cross_sections_ismabsar(bnene, xs, ifl)
 
   !--- Define data root location
   local_dir1 = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_species/i'
-  local_dir2 = 'smabs.Ar.dev'
+  local_dir2 = 'smabs.Ar/v1.1'
   ismabsar_root = trim(local_dir1) // trim(local_dir2)
   filename2 = trim(ismabsar_root) // fileloc
   chatmsg = trim(ismreadchat) // trim(filename2)
