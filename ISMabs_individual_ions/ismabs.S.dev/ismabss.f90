@@ -1,13 +1,18 @@
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-! ismabss
+! ismabssulfur
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption due to sulfur
+! Version 1.1 February 2026
+!
+! Additions to version 1.1
+! - We added the "use xsfortran" line to call all fortran routines included in xspec (valid for XSPEC 12.15.1)
+!
 ! Version 1.0 July 2025 
 !
 ! - This version only has CI-CVI as free parameters. 
 ! 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-subroutine ismabss(ear, ne, param, ifl, photar)
+subroutine ismabssulfur(ear, ne, param, ifl, photar)
 !
 ! The main routine to call all subroutines
 !
@@ -29,8 +34,8 @@ version='1.0'
   print *, 'ISMabs_sulfur: ISM absorption model Version ',version 
   print *, 'NOTE: this model does not include hydrogen or helium, only S'       
   print *, ' '
-  call read_cross_sections_ismabss( nemod,bxs,ifl)
-  call create_energy_grid_ismabss(1.d1,1.d4,bener,nemod) !Absorption coefficient calculation grid  = cross section grid
+  call read_cross_sections_ismabssulfur( nemod,bxs,ifl)
+  call create_energy_grid_ismabssulfur(1.d1,1.d4,bener,nemod) !Absorption coefficient calculation grid  = cross section grid
   startup=.false.  
  endif
 ! Model parameters
@@ -53,24 +58,24 @@ N_N_16 = param(16)
 rshift = param(17)
 zfac = 1/(1.d0+dble(rshift)) 
 
-call absorption_ismabss(N_N_1, N_N_2, &
+call absorption_ismabssulfur(N_N_1, N_N_2, &
 N_N_3, N_N_4, N_N_5, N_N_6, N_N_7, N_N_8, & 
 N_N_9, N_N_10, N_N_11, N_N_12,& 
 N_N_13, N_N_14, N_N_15, N_N_16,& 
 zfac, emod, nemod, coemod,bxs,cion,ifl,bener)
 
-call map_to_grid_ismabss(dble(ear),ne,emod,nemod,photar,coemod,ifl)
+call map_to_grid_ismabssulfur(dble(ear),ne,emod,nemod,photar,coemod,ifl)
 return
-end subroutine ismabss
+end subroutine ismabssulfur
 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
-subroutine read_cross_sections_ismabss(bnene, xs, ifl)
+subroutine read_cross_sections_ismabssulfur(bnene, xs, ifl)
   !---------------------------------------------------------------------
   ! Reads all cross sections and maps them onto a defined energy grid.
   ! Looks for the file at:
-  !     <ismabss_root>/atomic_data/AtomicData.fits
+  !     <ismabssulfur_root>/atomic_data/AtomicData.fits
   !---------------------------------------------------------------------
-
+  use xsfortran
   implicit none
   integer, parameter :: nion = 16, out_unit = 20
   integer, intent(in)  :: bnene, ifl
@@ -86,7 +91,7 @@ subroutine read_cross_sections_ismabss(bnene, xs, ifl)
   ! File and path strings
   character(len=*), parameter :: fileloc = '/atomic_data/AtomicData.fits'
   character(len=*), parameter :: ismreadchat = 'ismabs: reading from '
-  character(len=1024) :: local_dir1, local_dir2, ismabss_root, filename2
+  character(len=1024) :: local_dir1, local_dir2, ismabssulfur_root, filename2
   character(len=2048) :: chatmsg
 
   !--- Set max number of energy bins per ion
@@ -94,9 +99,9 @@ subroutine read_cross_sections_ismabss(bnene, xs, ifl)
 
   !--- Define data root location
   local_dir1 = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_species/i'
-  local_dir2 = 'smabs.S.dev'
-  ismabss_root = trim(local_dir1) // trim(local_dir2)
-  filename2 = trim(ismabss_root) // fileloc
+  local_dir2 = 'smabs.S/v1.2'
+  ismabssulfur_root = trim(local_dir1) // trim(local_dir2)
+  filename2 = trim(ismabssulfur_root) // fileloc
   chatmsg = trim(ismreadchat) // trim(filename2)
 
   call xwrite(chatmsg, out_unit)
@@ -150,10 +155,10 @@ endif
   call ftclos(inunit, status)
   call ftfiou(inunit, status)
 
-end subroutine read_cross_sections_ismabss
+end subroutine read_cross_sections_ismabssulfur
 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
-subroutine absorption_ismabss(N_N_1, N_N_2, N_N_3, N_N_4, N_N_5, N_N_6,  N_N_7, &
+subroutine absorption_ismabssulfur(N_N_1, N_N_2, N_N_3, N_N_4, N_N_5, N_N_6,  N_N_7, &
 				  N_N_8, N_N_9, N_N_10, N_N_11, N_N_12,&
 				  N_N_13, N_N_14, N_N_15, N_N_16,&
                                    zfac, e1, bnene, coeff, bxs2, cion, ifl, bener)
@@ -208,10 +213,10 @@ subroutine absorption_ismabss(N_N_1, N_N_2, N_N_3, N_N_4, N_N_5, N_N_6,  N_N_7, 
      coeff(i) = dexp(-tau)
   end do
 
-end subroutine absorption_ismabss
+end subroutine absorption_ismabssulfur
 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
-subroutine map_to_grid_ismabss(new_en, nne, old_en, one, nflux, old_flu, ifl)
+subroutine map_to_grid_ismabssulfur(new_en, nne, old_en, one, nflux, old_flu, ifl)
   ! Map data from an original energy grid to a new one using linear interpolation
   implicit none
 
@@ -227,8 +232,8 @@ subroutine map_to_grid_ismabss(new_en, nne, old_en, one, nflux, old_flu, ifl)
 
   do i = 1, nne
      ! Find bounding bins in old energy grid
-     call dbinsrch_ismabss(new_en(i - 1), bmin, old_en, one + 1)
-     call dbinsrch_ismabss(new_en(i), bmax, old_en, one + 1)
+     call dbinsrch_ismabssulfur(new_en(i - 1), bmin, old_en, one + 1)
+     call dbinsrch_ismabssulfur(new_en(i), bmax, old_en, one + 1)
      bmin = bmin - 1
      bmax = bmax - 1
 
@@ -266,10 +271,10 @@ subroutine map_to_grid_ismabss(new_en, nne, old_en, one, nflux, old_flu, ifl)
      nflux(i) = real(s)
   end do
 
-end subroutine map_to_grid_ismabss
+end subroutine map_to_grid_ismabssulfur
 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
-subroutine dbinsrch_ismabss(e, k, ener, n)
+subroutine dbinsrch_ismabssulfur(e, k, ener, n)
   ! Binary search for bin index k such that:
   ! ener(k) <= e < ener(k+1)
 
@@ -297,10 +302,10 @@ subroutine dbinsrch_ismabss(e, k, ener, n)
   end if
 
   k = klo
-end subroutine dbinsrch_ismabss
+end subroutine dbinsrch_ismabssulfur
 
 ! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++!
-subroutine create_energy_grid_ismabss(emin, emax, en, nen)
+subroutine create_energy_grid_ismabssulfur(emin, emax, en, nen)
   ! Log-spaced energy grid between emin and emax
 
   implicit none
@@ -316,6 +321,6 @@ subroutine create_energy_grid_ismabss(emin, emax, en, nen)
      en(i) = 10.d0 ** (log_emin + (log_emax - log_emin) * dble(i) / dble(nen))
   end do
 
-end subroutine create_energy_grid_ismabss
+end subroutine create_energy_grid_ismabssulfur
 
  
