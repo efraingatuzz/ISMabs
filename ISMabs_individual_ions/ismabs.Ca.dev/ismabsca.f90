@@ -2,6 +2,11 @@
 ! ismabsca
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ! XSPEC local model for ISM absorption due to calcium
+! Version 1.1 February 2026
+!
+! Additions to version 1.1
+! - We added the "use xsfortran" line to call all fortran routines included in xspec (valid for XSPEC 12.15.1)
+!
 ! Version 1.0 July 2025 
 !
 ! - This version only has CI-CVI as free parameters. 
@@ -76,7 +81,7 @@ subroutine read_cross_sections_ismabsca(bnene, xs, ifl)
   ! Looks for the file at:
   !     <ismabsca_root>/atomic_data/AtomicData.fits
   !---------------------------------------------------------------------
-
+  use xsfortran
   implicit none
   integer, parameter :: nion = 20, out_unit = 20
   integer, intent(in)  :: bnene, ifl
@@ -100,7 +105,7 @@ subroutine read_cross_sections_ismabsca(bnene, xs, ifl)
 
   !--- Define data root location
   local_dir1 = '/media/efrain/DATA/softwares/modelosXSPEC/ismabs/ismabs_no_turb/ismabs_species/i'
-  local_dir2 = 'smabs.Ca.dev'
+  local_dir2 = 'smabs.Ca/v1.1'
   ismabsca_root = trim(local_dir1) // trim(local_dir2)
   filename2 = trim(ismabsca_root) // fileloc
   chatmsg = trim(ismreadchat) // trim(filename2)
